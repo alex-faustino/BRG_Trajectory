@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.projecttango.examples.java.helloareadescription"
+        minSdkVersion 23
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+def external_lib_prefix = null
+if (project.hasProperty("Tango.catkin_devel_prefix")) {
+    external_lib_prefix = project.property("Tango.catkin_devel_prefix")
+} else {
+    // Building in standalone sample form.
+    external_lib_prefix = "../../TangoReleaseLibs"
+}
+
+repositories {
+    flatDir {
+        dirs external_lib_prefix + '/aar'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: external_lib_prefix + '/jar', include: ['**/*.jar'])
+    compile(name: 'tango_support_java_lib', ext: 'aar')
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'org.rajawali3d:rajawali:1.0.325@aar'
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    compile 'com.android.support:recyclerview-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+}
